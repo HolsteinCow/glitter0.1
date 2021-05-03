@@ -1,4 +1,6 @@
-public class Player extends Entity{
+package Game;
+
+public class Player extends Entity {
     private final long PID;
 
     Player(long PID, long EntityID){

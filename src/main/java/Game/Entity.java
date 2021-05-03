@@ -1,3 +1,7 @@
+package Game;
+
+import Game.ENTITY_TYPE;
+
 public abstract class Entity {
     protected final long ENTITY_ID;
     int x, y;
