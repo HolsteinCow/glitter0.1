@@ -1,12 +1,12 @@
-package Render;
+package Engine;
 
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 
+import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class Window {
@@ -16,6 +16,8 @@ public class Window {
     private static Window w = null;
 
     private long glfwWindow;
+
+    private static Screen s;
 
     private Window(){
         this.width = 1920;
@@ -36,6 +38,12 @@ public class Window {
         init();
         loop();
 
+        glfwFreeCallbacks(this.glfwWindow);
+        glfwDestroyWindow(this.glfwWindow);
+
+
+        glfwTerminate();
+        glfwSetErrorCallback(null).free();
     }
 
     public void init(){
@@ -54,6 +62,11 @@ public class Window {
         if ( this.glfwWindow == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
+        glfwSetCursorPosCallback(this.glfwWindow, MouseListener::mousePosCallback);
+        glfwSetMouseButtonCallback(this.glfwWindow, MouseListener::mouseButtonCallback);
+        glfwSetScrollCallback(this.glfwWindow, MouseListener::mouseScrollCallback);
+        glfwSetKeyCallback(this.glfwWindow, KeyListener::keyCallback);
+
         glfwMakeContextCurrent(this.glfwWindow);
         glfwSwapInterval(1);
         glfwShowWindow(this.glfwWindow);
@@ -62,11 +75,24 @@ public class Window {
     public void loop(){
         GL.createCapabilities();
 
+        float begin = Time.get();
+        float end, dT;
+
         while(!glfwWindowShouldClose(this.glfwWindow)){
             glfwPollEvents();
-            glClearColor(0.0f,0.0f,0.0f,1.0f);
+
+            glClearColor(1.0f,1.0f,1.0f,1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)){
+                System.out.println("im in space");
+            }
+
             glfwSwapBuffers(this.glfwWindow);
+
+            end = Time.get();
+            dT = end - begin;
+            begin = end;
         }
     }
 }
