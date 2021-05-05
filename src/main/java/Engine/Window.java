@@ -76,7 +76,8 @@ public class Window {
         GL.createCapabilities();
 
         float begin = Time.get();
-        float end, dT;
+        float dT = 0;
+        float end;
 
         while(!glfwWindowShouldClose(this.glfwWindow)){
             glfwPollEvents();
@@ -85,7 +86,7 @@ public class Window {
             glClear(GL_COLOR_BUFFER_BIT);
 
             if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)){
-                System.out.println("im in space");
+                System.out.println("im in space " + dT);
             }
 
             glfwSwapBuffers(this.glfwWindow);
