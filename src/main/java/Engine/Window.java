@@ -1,5 +1,6 @@
 package Engine;
 
+import Engine.Screens.TitleScreen;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -17,12 +18,13 @@ public class Window {
 
     private long glfwWindow;
 
-    private static Screen s;
+    private Screen s = null;
 
     private Window(){
         this.width = 1920;
         this.height = 1080;
         this.title = "Window";
+        s = new TitleScreen();
     }
 
     public static Window getWindow(){
@@ -32,10 +34,18 @@ public class Window {
         return Window.w;
     }
 
+    //public static void changeScreen(int newScreen){
+
+    //}
+
+
     public void run(){
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         init();
+
+
+
         loop();
 
         glfwFreeCallbacks(this.glfwWindow);
@@ -49,7 +59,7 @@ public class Window {
     public void init(){
         GLFWErrorCallback.createPrint(System.err).set();
 
-        if ( !glfwInit() )
+        if (!glfwInit())
             throw new IllegalStateException("Unable to initialize GLFW");
 
         glfwDefaultWindowHints();
@@ -59,7 +69,7 @@ public class Window {
 
         this.glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 
-        if ( this.glfwWindow == NULL )
+        if (this.glfwWindow == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
         glfwSetCursorPosCallback(this.glfwWindow, MouseListener::mousePosCallback);
@@ -70,10 +80,13 @@ public class Window {
         glfwMakeContextCurrent(this.glfwWindow);
         glfwSwapInterval(1);
         glfwShowWindow(this.glfwWindow);
+
     }
 
     public void loop(){
         GL.createCapabilities();
+
+        s.init();
 
         float begin = Time.get();
         float dT = 0;
@@ -88,6 +101,8 @@ public class Window {
             if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)){
                 System.out.println("im in space " + dT);
             }
+
+            s.update(dT);
 
             glfwSwapBuffers(this.glfwWindow);
 
