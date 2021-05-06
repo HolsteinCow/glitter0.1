@@ -15,9 +15,9 @@ public class TitleScreen extends Screen{
     private Shader shade;
     private float[] vertexArray = {
             0.5f, -0.5f, 0.0f,        1.0f, 0.0f, 0.0f, 0.0f,
-            -0.5f, 0.5f, 0.0f,        1.0f, 100.0f, 1.0f, 1.0f,
-            0.5f, 0.5f, 0.0f,         1.0f, 1.0f, -100.0f, 1.0f,
-            -0.5f, -0.5f, 0.0f,       1.0f, 1.0f, 1.0f, 0.0f,
+            -0.5f, 0.5f, 0.0f,        1.0f, 0.0f, 1.0f, 1.0f,
+            0.5f, 0.5f, 0.0f,         1.0f, 1.0f, 0.0f, 1.0f,
+            -0.5f, -0.5f, 0.0f,       0.0f, 1.0f, 1.0f, 1.0f,
     };
     private int[] elementArray = {
         2,1,0,
@@ -31,7 +31,6 @@ public class TitleScreen extends Screen{
 
     @Override
     public void init(){
-
         this.shade = new Shader("C:\\Users\\King\\glitter\\src\\main\\java\\Engine\\Assets\\Shaders\\default.glsl");
         shade.compile();
 
@@ -40,6 +39,7 @@ public class TitleScreen extends Screen{
 
         FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertexArray.length);
         vertexBuffer.put(vertexArray).flip();
+        System.out.println("vertexBuffer: " + vertexBuffer.toString());
 
         vboId = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
@@ -59,15 +59,13 @@ public class TitleScreen extends Screen{
         glVertexAttribPointer(0, positionsSize, GL_FLOAT, false, vertexSizeBytes, 0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionsSize);
+        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, floatSizeBytes * positionsSize);
         glEnableVertexAttribArray(1);
     }
 
     @Override
     public void update(float time){
         this.shade.use();
-
-        this.shade.uploadFloat("uTime", time);
 
 
         glBindVertexArray(vaoId);

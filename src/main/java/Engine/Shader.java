@@ -71,8 +71,8 @@ public class Shader {
             assert false : "Error: Couldn't open file at: " + filepath;
         }
 
-        System.out.println(vertexSource);
-        System.out.println(fragmentSource);
+        //System.out.println(vertexSource);
+        //System.out.println(fragmentSource);
     }
 
     public void compile() {
@@ -89,7 +89,7 @@ public class Shader {
             int len = glGetShaderi(vertexId, GL_INFO_LOG_LENGTH);
             System.out.println(filepath + " vertex shader compilation error");
             System.out.println(glGetShaderInfoLog(vertexId, len));
-            //assert false : "";
+            assert false : "";
         }
 
         fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
@@ -103,7 +103,7 @@ public class Shader {
             int len = glGetShaderi(fragmentId, GL_INFO_LOG_LENGTH);
             System.out.println(filepath + " fragment compilation error");
             System.out.println(glGetShaderInfoLog(fragmentId, len));
-            //assert false : "";
+            assert false : "";
         }
 
         shaderPID = glCreateProgram();
@@ -116,7 +116,7 @@ public class Shader {
             int len = glGetShaderi(shaderPID, GL_INFO_LOG_LENGTH);
             System.out.println(filepath + " shader linking error");
             System.out.println(glGetShaderInfoLog(shaderPID, len));
-            //assert false : "";
+            assert false : "";
         }
     }
 
